@@ -15,16 +15,16 @@ cd mlvizz-grafana-local
 2️⃣ Start Docker Containers: 
 docker compose up -d
 
-This starts:
+This starts
 pg_insurance (PostgreSQL)
 grafana_insurance (Grafana)
 
-3️⃣ Restore the Insurance Database
+3️⃣ Restore the Insurance Database: 
 docker exec -e PGPASSWORD=postgres -it pg_insurance \
   pg_restore -U postgres -h localhost -p 5432 -d insurance \
   --clean --if-exists --no-owner --no-privileges --verbose \
   /backups/insurance.dump
-✅ This creates and populates:
+✅ This creates and populates
 agents, claims, insured_items, policies, policyholders
 
 4️⃣ Install Python Dependencies
