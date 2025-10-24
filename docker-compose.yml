@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: pg_insurance
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: insurance
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d insurance"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./backup:/backups:ro
+
+  grafana:
+    image: grafana/grafana:11.2.0
+    container_name: grafana_insurance
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - grafana:/var/lib/grafana
+
+volumes:
+  pgdata:
+  grafana:
