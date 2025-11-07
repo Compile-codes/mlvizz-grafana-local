@@ -1,0 +1,254 @@
+{
+  "components": [
+    {
+      "id": "filter_insurance_type",
+      "type": "dropdown_filter",
+      "title": "Insurance Type",
+      "filter_key": "insurancetype",
+      "table_name": "policies",
+      "placeholder": "Select Insurance Type",
+      "multi_select": true,
+      "filter_column": "insurancetype",
+      "query_key_options": "filter_insurance_type",
+      "data_column_name_for_options": "insurancetype"
+    },
+    {
+      "id": "filter_claim_status",
+      "type": "dropdown_filter",
+      "title": "Claim Status",
+      "filter_key": "status",
+      "table_name": "claims",
+      "placeholder": "Select Claim Status",
+      "multi_select": true,
+      "filter_column": "status",
+      "query_key_options": "filter_claim_status",
+      "data_column_name_for_options": "status"
+    },
+    {
+      "id": "filter_agent",
+      "type": "dropdown_filter",
+      "title": "Agent",
+      "filter_key": "agentid",
+      "table_name": "agents",
+      "placeholder": "Select Agent",
+      "multi_select": true,
+      "filter_column": "agentid",
+      "query_key_options": "filter_agent",
+      "data_column_name_for_options": "agentname"
+    },
+    {
+      "id": "filter_claim_date",
+      "type": "date_range_filter",
+      "title": "Claim Date Range",
+      "filter_key": "claimdate",
+      "table_name": "claims",
+      "filter_column": "claimdate"
+    },
+    {
+      "id": "kpi_total_policies",
+      "type": "kpi",
+      "title": "Total Policies",
+      "table_name": "policies",
+      "value_column": "total_count",
+      "query_key_data": "kpi_total_policies",
+      "formatting_hint": "integer"
+    },
+    {
+      "id": "kpi_total_claims",
+      "type": "kpi",
+      "title": "Total Claims",
+      "table_name": "claims",
+      "value_column": "total_count",
+      "query_key_data": "kpi_total_claims",
+      "formatting_hint": "integer"
+    },
+    {
+      "id": "kpi_total_insured_items",
+      "type": "kpi",
+      "title": "Total Insured Items",
+      "table_name": "insured_items",
+      "value_column": "total_count",
+      "query_key_data": "kpi_total_insured_items",
+      "formatting_hint": "integer"
+    },
+    {
+      "id": "bar_policies_by_insurance_type",
+      "type": "bar_chart",
+      "title": "Policies by Insurance Type",
+      "series": [
+        {
+          "label": "Policies",
+          "column": "count"
+        }
+      ],
+      "x_axis": {
+        "label": "Insurance Type",
+        "column": "insurancetype"
+      },
+      "y_axis": {
+        "label": "Number of Policies",
+        "column": "count"
+      },
+      "table_name": "policies",
+      "query_key_data": "bar_policies_by_insurance_type"
+    },
+    {
+      "id": "bar_claims_by_status",
+      "type": "bar_chart",
+      "title": "Claims by Status",
+      "series": [
+        {
+          "label": "Claims",
+          "column": "count"
+        }
+      ],
+      "x_axis": {
+        "label": "Claim Status",
+        "column": "status"
+      },
+      "y_axis": {
+        "label": "Number of Claims",
+        "column": "count"
+      },
+      "table_name": "claims",
+      "query_key_data": "bar_claims_by_status"
+    },
+    {
+      "id": "line_claims_over_time",
+      "type": "line_chart",
+      "title": "Claims Over Time",
+      "series": [
+        {
+          "label": "Claims",
+          "column": "count"
+        }
+      ],
+      "x_axis": {
+        "label": "Claim Date",
+        "column": "claimdate"
+      },
+      "y_axis": {
+        "label": "Number of Claims",
+        "column": "count"
+      },
+      "table_name": "claims",
+      "query_key_data": "line_claims_over_time"
+    }
+  ],
+  "sql_queries": {
+    "filter_agent": "SELECT agentname AS __text, agentid AS __value FROM agents ORDER BY agentname;",
+    "filter_claim_status": "SELECT DISTINCT status AS __text, status AS __value FROM claims ORDER BY status;",
+    "filter_insurance_type": "SELECT DISTINCT insurancetype AS __text, insurancetype AS __value FROM policies ORDER BY insurancetype;",
+    "kpi_total_policies": "SELECT COUNT(*) AS total_count FROM policies ##WHERE_CLAUSE##",
+    "kpi_total_claims": "SELECT COUNT(*) AS total_count FROM claims ##WHERE_CLAUSE##",
+    "kpi_total_insured_items": "SELECT COUNT(*) AS total_count FROM insured_items",
+    "bar_policies_by_insurance_type": "SELECT insurancetype AS label, COUNT(*) AS count FROM policies ##WHERE_CLAUSE## GROUP BY insurancetype ORDER BY count DESC",
+    "bar_claims_by_status": "SELECT status AS label, COUNT(*) AS count FROM claims ##WHERE_CLAUSE## GROUP BY status ORDER BY count DESC",
+    "line_claims_over_time": "SELECT DATE_TRUNC('month', claimdate) AS time, COUNT(*) AS count FROM claims ##WHERE_CLAUSE## GROUP BY 1 ORDER BY 1"
+
+  },
+  "filter_links": [
+    {
+      "targets": [
+        {
+          "target_component_id": "kpi_total_policies",
+          "source_value_provider_column": "insurancetype",
+          "target_query_column_to_filter": "policies.insurancetype"
+        },
+        {
+          "target_component_id": "bar_policies_by_insurance_type",
+          "source_value_provider_column": "insurancetype",
+          "target_query_column_to_filter": "policies.insurancetype"
+        }
+      ],
+      "source_component_id": "filter_insurance_type"
+    },
+    {
+      "targets": [
+        {
+          "target_component_id": "kpi_total_claims",
+          "source_value_provider_column": "status",
+          "target_query_column_to_filter": "claims.status"
+        },
+        {
+          "target_component_id": "bar_claims_by_status",
+          "source_value_provider_column": "status",
+          "target_query_column_to_filter": "claims.status"
+        }
+      ],
+      "source_component_id": "filter_claim_status"
+    },
+    {
+      "targets": [
+        {
+          "target_component_id": "kpi_total_policies",
+          "source_value_provider_column": "agentid",
+          "target_query_column_to_filter": "policies.agentid"
+        },
+        {
+          "target_component_id": "bar_policies_by_insurance_type",
+          "source_value_provider_column": "agentid",
+          "target_query_column_to_filter": "policies.agentid"
+        }
+      ],
+      "source_component_id": "filter_agent"
+    },
+    {
+      "targets": [
+        {
+          "target_component_id": "kpi_total_claims",
+          "source_value_provider_column": "claimdate",
+          "target_query_column_to_filter": "claims.claimdate"
+        },
+        {
+          "target_component_id": "bar_claims_by_status",
+          "source_value_provider_column": "claimdate",
+          "target_query_column_to_filter": "claims.claimdate"
+        },
+        {
+          "target_component_id": "line_claims_over_time",
+          "source_value_provider_column": "claimdate",
+          "target_query_column_to_filter": "claims.claimdate"
+        }
+      ],
+      "source_component_id": "filter_claim_date"
+    }
+  ],
+  "layout_structure": [
+    {
+      "columns": [
+        { "width": 3, "component_id": "filter_insurance_type" },
+        { "width": 3, "component_id": "filter_claim_status" },
+        { "width": 3, "component_id": "filter_agent" },
+        { "width": 3, "component_id": "filter_claim_date" }
+      ],
+      "section_type": "row"
+    },
+    {
+      "columns": [
+        { "width": 4, "component_id": "kpi_total_policies" },
+        { "width": 4, "component_id": "kpi_total_claims" },
+        { "width": 4, "component_id": "kpi_total_insured_items" }
+      ],
+      "section_type": "row"
+    },
+    {
+      "columns": [
+        { "width": 6, "component_id": "bar_policies_by_insurance_type" },
+        { "width": 6, "component_id": "bar_claims_by_status" }
+      ],
+      "section_type": "row"
+    },
+    {
+      "columns": [
+        { "width": 12, "component_id": "line_claims_over_time" }
+      ],
+      "section_type": "row"
+    }
+  ],
+  "dashboard_settings": {
+    "title": "Insurance Operations Dashboard",
+    "subtitle": "Overview of Policies, Claims, and Insured Items",
+    "database_name": "7"
+  }
+}
