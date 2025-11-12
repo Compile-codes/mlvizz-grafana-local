@@ -12,7 +12,7 @@ import os, sys, json, requests, re
 
 GRAFANA_URL = os.environ.get("GRAFANA_URL", "http://localhost:3000").rstrip("/")
 GRAFANA_USER = os.environ.get("GRAFANA_USER", "admin")
-GRAFANA_PASS = os.environ.get("GRAFANA_PASS", "Pwd4simplyai!")
+GRAFANA_PASS = os.environ.get("GRAFANA_PASS", "admin")
 DS_NAME = os.environ.get("DS_NAME", "Postgres Insurance (internal)")
 PG_HOST = os.environ.get("PG_HOST", "postgres:5432")
 PG_DB = os.environ.get("PG_DB", "insurance")
