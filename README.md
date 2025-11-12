@@ -29,7 +29,10 @@ docker exec -e PGPASSWORD=postgres -it pg_insurance \
 agents, claims, insured_items, policies, policyholders
 
 4️⃣ Install Python Dependencies
-python3 -m pip install requests
+python3 -m vevn venv
+source venv/bin/activate (Create and activate virtual environment)
+
+pip install requests
 
 5️⃣ Run the Provisioning Script using dashboarding template json file
 python3 provision_grafana_mlvizz.py example.json

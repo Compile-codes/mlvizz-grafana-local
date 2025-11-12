@@ -2,7 +2,7 @@
 
 # Grafana 11 compatible dynamic dashboard provisioning
 
-# Author: Joel Antony (SimplyAI) - Final Stable Version (working identical to manual code)
+# Author: Joel Antony (SimplyAI)
 
 import os, sys, json, requests, re
 
